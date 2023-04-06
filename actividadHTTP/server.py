@@ -1,5 +1,5 @@
 import socket
- 
+import json
  
 
 
@@ -29,21 +29,25 @@ def receive_header(connection_socket, buff_size, end_sequence):
     # removemos la secuencia de fin de mensaje, esto entrega un mensaje en string
      
     head = remove_end_of_message(full_head.decode(), end_sequence)
-    head = head.decode()
-    header_list = header.split("\r\n")
+    header_str = head
+    header_list = header_str.split("\r\n")
     header_dict = dict()
-    header_dict["Content-Length"] = 0
+    header_dict["Content-Length"] = '0'
     for header in header_list[1:]:
         header_split = header.split(": ")
         header_dict[header_split[0]] = header_split[1]
      
     # finalmente retornamos el mensaje
-    return header_dict
+    return header_dict, header_str
 
 def receive_body(connection_socket, buff_size, content_length):
     """ 
-    This function recieves a string of the body
+    This function returns a string of the body of the http message
     """
+
+    if content_length == 0:
+        return ""
+    
     recv_message = connection_socket.recv(buff_size)
     full_body = recv_message
     
@@ -53,7 +57,7 @@ def receive_body(connection_socket, buff_size, content_length):
         recv_message = connection_socket.recv(buff_size)
         full_body+=recv_message
         read_length+=buff_size
-
+    return full_body.decode()
 
 
 
@@ -67,9 +71,9 @@ def remove_end_of_message(full_message, end_sequence):
  
 if __name__ == "__main__": 
     # definimos el tamaño del buffer de recepción y la secuencia de fin de mensaje
-    buff_size = 16
+    buff_size = 40
     end_of_message = "\r\n\r\n"
-    new_socket_address = ('localhost', 5000)
+    new_socket_address = ('localhost', 8000)
 
     print('Creando socket - Servidor')
     # armamos el socket
@@ -88,6 +92,10 @@ if __name__ == "__main__":
 
     # nos quedamos esperando a que llegue una petición de conexión
     print('... Esperando clientes')
+    name = ""
+    with open("nombre.json") as file:
+        data = json.load(file)
+        name = data["nombre"]
     while True:
         # cuando llega una petición de conexión la aceptamos
         # y se crea un nuevo socket que se comunicará con el cliente
@@ -95,14 +103,17 @@ if __name__ == "__main__":
 
         # luego recibimos el mensaje usando la función que programamos
         # esta función entrega el mensaje en string (no en bytes) y sin el end_of_message
-        head = receive_header(new_socket, buff_size, end_of_message)
-        body = 
-
-        print(f' -> Se ha recibido el siguiente mensaje: {recv_message}')
+        head, head_str = receive_header(new_socket, buff_size, end_of_message)
+        content_length = int(head["Content-Length"])
+        body = receive_body(new_socket, buff_size, content_length)
+        full_message = head_str + "\r\n" + f"X-ElQuePregunta: {name}" + "\r\n\r\n" + body
+#        for key in head.keys():
+#            string = key + ": " + head[key] + "/r/n"
+#            print(string)
+        print(full_message)
 
         # respondemos indicando que recibimos el mensaje
-        response_message = f"Se ha sido recibido con éxito el mensaje: {recv_message}"
-
+        response_message = full_message
         # el mensaje debe pasarse a bytes antes de ser enviado, para ello usamos encode
         new_socket.send(response_message.encode())
 
