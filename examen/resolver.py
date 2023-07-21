@@ -75,7 +75,7 @@ def resolver(query, address = ROOT_ADDRESS):
     if authtype == "NS":
         addanswer, addtype = record.find_add()
         if addtype == "A":
-            sendskt.sendto(query, (addanswer))
+            sendskt.sendto(query, (addanswer, 53))
             adddata, _ = sendskt.recvfrom(4096)
             return adddata
         return resolver(query, (authanswer, 53))
