@@ -82,7 +82,9 @@ if __name__ == "__main__":
     skt.settimeout(20)
     while True:
         try:
-            query, address = skt.recvfrom(1024)
-            skt.sendto(resolver(query), address)
+            query, address = skt.recvfrom(4096)
+            ans = resolver(query)
+            if ans != None:
+                skt.sendto(ans, address)
         except socket.timeout:
             print("timed out")
