@@ -17,7 +17,7 @@ class Record:
     def set_ans(self, ans):
         self.ans = ans
 
-    def set_ans(self, auth):
+    def set_auth(self, auth):
         self.auth = auth
 
     def set_add(self, add):
