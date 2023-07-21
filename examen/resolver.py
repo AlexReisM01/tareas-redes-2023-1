@@ -8,6 +8,6 @@ if __name__ == "__main__":
     while True:
         try:
             data, address = skt.recvfrom(2048)
-            print(data)
-        except:
+            print(data.decode())
+        except socket.timeout:
             print("timed out")
