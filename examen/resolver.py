@@ -89,6 +89,5 @@ if __name__ == "__main__":
             ans = resolver(query)
             if ans != None:
                 skt.sendto(ans, address)
-            else
         except socket.timeout:
             print("timed out")
