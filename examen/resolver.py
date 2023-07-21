@@ -51,6 +51,7 @@ class Record:
 
 def resolver(query, address = ROOT_ADDRESS):
     sendskt = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    print(f"sending query to {address}")
     sendskt.sendto(query, address)
     data, _ = sendskt.recvfrom(4096)
     parsed_data = DNSRecord.parse(data)
@@ -73,6 +74,7 @@ def resolver(query, address = ROOT_ADDRESS):
             adddata, _ = sendskt.recvfrom(4096)
             return adddata
         return resolver(query, (authanswer, 53))
+    print "NO ANSWER"
     return None #ignore other type of answers
     
 
@@ -83,8 +85,10 @@ if __name__ == "__main__":
     while True:
         try:
             query, address = skt.recvfrom(4096)
+            print(f"RECEIVING QUERY FROM {address}")
             ans = resolver(query)
             if ans != None:
                 skt.sendto(ans, address)
+            else
         except socket.timeout:
             print("timed out")
