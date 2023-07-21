@@ -1,6 +1,7 @@
 import socket
 from dnslib import DNSRecord, DNSHeader, DNSQuestion
 from dnslib.dns import RR, A, CLASS, QTYPE
+from example import print_dns_reply_elements
 
 ROOT_ADDRESS = ("192.33.4.12", 53)
 
@@ -54,8 +55,8 @@ def resolver(query, address = ROOT_ADDRESS):
     print(f"sending query to {address}")
     sendskt.sendto(query, address)
     data, _ = sendskt.recvfrom(4096)
-    print(data)
     parsed_data = DNSRecord.parse(data)
+    print_dns_reply_elements(parsed_data)
     ans_num, auth_num, ar_num = parsed_data.header.a, parsed_data.header.auth, parsed_data.header.ar
     record = Record(parsed_data.get_q().get_qname(), ans_num, auth_num, ar_num)
     if(ans_num>0):
