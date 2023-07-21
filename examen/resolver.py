@@ -39,7 +39,7 @@ class Record:
         return 0, ""
     
     def find_auth(self):
-        for auth in self.add:
+        for auth in self.auth:
             
             rtype = QTYPE.get(auth.rtype)
             print(f"looking for auth type: {rtype}")
