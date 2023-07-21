@@ -35,6 +35,7 @@ class Record:
         for add in self.add:
             rtype = QTYPE.get(add.rtype)
             if(rtype == "A"):
+                print(add.rdata)
                 return add.rdata, rtype
         return 0, ""
     
