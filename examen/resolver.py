@@ -40,7 +40,9 @@ class Record:
     
     def find_auth(self):
         for auth in self.add:
+            
             rtype = QTYPE.get(auth.rtype)
+            print(f"looking for auth type: {rtype}")
             if(rtype == "NS"):
                 return auth.rdata, rtype
         return 0, ""
@@ -69,6 +71,7 @@ def resolver(query, address = ROOT_ADDRESS):
     if rtype == "A":
         return data
     authanswer, authtype = record.find_auth()
+    print(authtype)
     if authtype == "NS":
         addanswer, addtype = record.find_add()
         if addtype == "A":

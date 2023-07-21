@@ -147,15 +147,15 @@ def print_dns_reply_elements(dnslib_reply):
     print(">>----------------------------------------------<<\n")
 
 # Vamos a preguntar por cl. a un resolver existente
-dnslib_reply_1 = send_dns_message("cl.", "8.8.8.8", 53)
-# Como cl se encarga de un area entera, vamos a recibir un registro SOA que nos indica el primary_name_server = a.nic.cl.
-print_dns_reply_elements(dnslib_reply_1)
-
-print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
-# Si ahora queremos saber la IP, podemos volver a preguntarle al resolver. Esta vez preguntamos por el primary_name_server
-dnslib_reply_2 = send_dns_message("a.nic.cl.", "8.8.8.8", 53)
-# En las respuestas vamos a obtener la IP de este primary_name_server
-print_dns_reply_elements(dnslib_reply_2)
+#dnslib_reply_1 = send_dns_message("cl.", "8.8.8.8", 53)
+## Como cl se encarga de un area entera, vamos a recibir un registro SOA que nos indica el primary_name_server = a.nic.cl.
+#print_dns_reply_elements(dnslib_reply_1)
+#
+#print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
+## Si ahora queremos saber la IP, podemos volver a preguntarle al resolver. Esta vez preguntamos por el primary_name_server
+#dnslib_reply_2 = send_dns_message("a.nic.cl.", "8.8.8.8", 53)
+## En las respuestas vamos a obtener la IP de este primary_name_server
+#print_dns_reply_elements(dnslib_reply_2)
 
 # Propuesto: Utilizando la IP que puede ver en pantalla, ahora consulte por uchile.cl, pero consultele al NS de cl.
 # compare esta respuesta con la respuesta obteniida al preguntar por uchile.cl al resolver "8.8.8.8".
