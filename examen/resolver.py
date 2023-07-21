@@ -74,7 +74,7 @@ def resolver(query, address = ROOT_ADDRESS):
             adddata, _ = sendskt.recvfrom(4096)
             return adddata
         return resolver(query, (authanswer, 53))
-    print "NO ANSWER"
+    print("NO ANSWER")
     return None #ignore other type of answers
     
 
