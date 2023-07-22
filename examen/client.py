@@ -12,7 +12,9 @@ if __name__ == "__main__":
         client_socket.sendto(query, ("localhost", 8888)) #sending message to router
         try:
             response = client_socket.recv(4096)
-            if len(response)>0:
+            if response == b"no response":
+                print("no response")
+            elif len(response)>0:
                 print(DNSRecord.parse(response))
         except TimeoutError:
             print("timed out")

@@ -86,8 +86,9 @@ if __name__ == "__main__":
             query, (ip, port) = skt.recvfrom(4096)
             print(f"RECEIVING QUERY FROM {(ip, port)}")
             ans = resolver(query)
-            if ans != None:
-                ans = f"{ip},{port},".encode() + ans
-                skt.sendto(ans, (ip, port))
+            if ans == None:
+                ans = b"no response"
+            ans = f"{ip},{port},".encode() + ans
+            skt.sendto(ans, (ip, port))
         except socket.timeout:
             print("timed out")
