@@ -19,11 +19,12 @@ class Router:
         self.natprivate = dict()
 
 
-
+    
     def listen(self):
         while(True):
-            full_msg, (ip, private) = self.routerSocket.recvfrom(4096)
+            full_msg, (ip, private) = self.routerSocket.recvfrom(4096) # this should be paralleled with threads to accept multiple clients, but it is a simplified version that connects with only one
             if (ip, private) not in self.natprivate.keys(): # saves client if it doesnt exist
+                print("creating")
                 public_port = random.randint(8000, 15000)   # generates public port
                 publicskt = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
                 while True:
@@ -36,6 +37,7 @@ class Router:
                 self.natpublic[public_port] = (ip, private)
                 self.natprivate[(ip, private)] = [public_port, publicskt]
             else:
+                print("exists")
                 publicskt = self.natprivate[(ip, private)][1] #looks up client if it exists
             print("sending data")
             publicskt.sendto(full_msg, ("localhost", 8000)) # sends dns message to server

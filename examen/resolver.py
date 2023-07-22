@@ -80,7 +80,7 @@ def resolver(query, address = ROOT_ADDRESS):
 if __name__ == "__main__":
     skt = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     skt.bind(("localhost", 8000))
-    skt.settimeout(20)
+    skt.settimeout(10)
     while True:
         try:
             query, (ip, port) = skt.recvfrom(4096)
