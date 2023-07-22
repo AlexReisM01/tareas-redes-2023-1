@@ -37,12 +37,13 @@ class Router:
                 self.natprivate[(ip, private)] = [public_port, publicskt]
             else:
                 publicskt = self.natprivate[(ip, private)][1] #looks up client if it exists
+            print("sending data")
             publicskt.sendto(full_msg, ("localhost", 8000)) # sends dns message to server
             response, _ = publicskt.recvfrom(4096)
             responselist = response.split(b",", 2)
             destination_port = responselist[1]
             response_msg = responselist[2]
-            destination = self.natpublic[destination_port] #looks up the private direction of the destination
+            destination = self.natpublic[int(destination_port.decode())] #looks up the private direction of the destination
             self.routerSocket.sendto(response_msg, destination)
 
             
